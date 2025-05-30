@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
 import ModalOperador from "../components/ModalOperador";
 import ModalEditarDados from "../components/ModalEditarDados";
 import CardSolicitacao from "../components/CardSolicitacao";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const [finalizadas, setFinalizadas] = useState(10);
   const [mostrarModalOperador, setMostrarModalOperador] = useState(false);
   const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
@@ -36,6 +39,7 @@ export default function Home() {
         liquido: "25.000 kg",
         bruto: "37.000 kg",
         data: "30/05/2025 10:30",
+        pesoDesejado: 24000,
       },
     },
     {
@@ -46,16 +50,7 @@ export default function Home() {
         liquido: "28.000 kg",
         bruto: "39.000 kg",
         data: "30/05/2025 10:35",
-      },
-    },
-    {
-      balanca: "02",
-      dados: {
-        placa: "JJK-5432",
-        tara: "10.000 kg",
-        liquido: "30.000 kg",
-        bruto: "40.000 kg",
-        data: "30/05/2025 10:40",
+        pesoDesejado: 24500,
       },
     },
   ];
@@ -149,7 +144,11 @@ export default function Home() {
                 key={i}
                 balanca={s.balanca}
                 dados={s.dados}
-                onAceitar={() => console.log("Aceito", s)}
+                onAceitar={() =>
+                  navigate("/acompanhar", {
+                    state: { pesoDesejado: s.dados.pesoDesejado },
+                  })
+                }
                 onRejeitar={() => console.log("Rejeitado", s)}
               />
             ))}
