@@ -8,6 +8,7 @@ export default function Home() {
   const [mostrarModalOperador, setMostrarModalOperador] = useState(false);
   const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
   const [operador, setOperador] = useState(null);
+  const [mostrarToast, setMostrarToast] = useState(false);
 
   const operadores = [
     { id: 501, nome: "Jhon Doe dos Santos Junior" },
@@ -25,15 +26,23 @@ export default function Home() {
     porta: "2222",
   });
 
-  useEffect(() => {
-    const salvo = localStorage.getItem("operador");
-    if (salvo) setOperador(JSON.parse(salvo));
-  }, []);
-
+  // Selecionar Operador
   const handleSelecionar = (op) => {
     setOperador(op);
     localStorage.setItem("operador", JSON.stringify(op));
     setMostrarModalOperador(false);
+  };
+
+  // Iniciar Turno
+  const handleIniciarTurno = () => {
+    if (!operador) {
+      setMostrarToast(true);
+      setTimeout(() => setMostrarToast(false), 3000); // some após 3s
+      return;
+    }
+
+    console.log("Turno iniciado com operador:", operador);
+    // Aqui você pode navegar para outra tela ou alterar o estado da interface
   };
 
   const handleEditarChange = (campo, valor) => {
@@ -80,7 +89,10 @@ export default function Home() {
             >
               Selecionar Operador
             </button>
-            <button className="w-full bg-green-600 text-white py-3 rounded text-sm">
+            <button
+              onClick={handleIniciarTurno}
+              className="w-full bg-green-600 text-white py-3 rounded text-sm"
+            >
               Iniciar Turno
             </button>
           </div>
@@ -116,6 +128,11 @@ export default function Home() {
           onClose={() => setMostrarModalEditar(false)}
           podeEditar={podeEditar}
         />
+      )}
+      {mostrarToast && (
+        <div className="fixed bottom-6 left-[280px] bg-red-600 text-white px-6 py-3 rounded shadow-lg z-50 text-sm font-semibold animate-fade-in-out">
+          Para iniciar o turno, selecione um operador.
+        </div>
       )}
     </div>
   );
