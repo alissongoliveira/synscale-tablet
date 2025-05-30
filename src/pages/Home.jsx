@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import ModalOperador from "../components/ModalOperador";
+import ModalEditarDados from "../components/ModalEditarDados";
 
 export default function Home() {
   const [finalizadas, setFinalizadas] = useState(0);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalOperador, setMostrarModalOperador] = useState(false);
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
   const [operador, setOperador] = useState(null);
 
   const operadores = [
@@ -12,6 +14,16 @@ export default function Home() {
     { id: 600, nome: "Jane Doe dos Santos Silva" },
     { id: 645, nome: "João Santos Smith" },
   ];
+
+  // Mock de privilégio — em breve virá da API/localStorage
+  const podeEditar = false;
+
+  // Mock de dados do tablet
+  const [dadosTablet, setDadosTablet] = useState({
+    identificador: "PC - 415",
+    ip: "111.111.1.111",
+    porta: "2222",
+  });
 
   useEffect(() => {
     const salvo = localStorage.getItem("operador");
@@ -21,7 +33,17 @@ export default function Home() {
   const handleSelecionar = (op) => {
     setOperador(op);
     localStorage.setItem("operador", JSON.stringify(op));
-    setMostrarModal(false);
+    setMostrarModalOperador(false);
+  };
+
+  const handleEditarChange = (campo, valor) => {
+    setDadosTablet((prev) => ({ ...prev, [campo]: valor }));
+  };
+
+  const handleSalvarEdicao = () => {
+    // Aqui futuramente salvará na API
+    console.log("Dados salvos:", dadosTablet);
+    setMostrarModalEditar(false);
   };
 
   return (
@@ -43,7 +65,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* Contador centralizado */}
+        {/* Contador */}
         <div className="flex flex-col items-center justify-center text-center flex-1">
           <h2 className="text-sm font-semibold">SOLICITAÇÕES FINALIZADAS</h2>
           <div className="text-5xl mt-2">{finalizadas}</div>
@@ -53,7 +75,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-full px-2 space-y-3">
             <button
-              onClick={() => setMostrarModal(true)}
+              onClick={() => setMostrarModalOperador(true)}
               className="w-full bg-[#1e293b] text-white py-3 rounded text-sm"
             >
               Selecionar Operador
@@ -62,7 +84,10 @@ export default function Home() {
               Iniciar Turno
             </button>
           </div>
-          <GearIcon className="w-6 h-6 mt-4" />
+          <GearIcon
+            onClick={() => setMostrarModalEditar(true)}
+            className="w-6 h-6 mt-4 cursor-pointer"
+          />
         </div>
       </aside>
 
@@ -73,12 +98,23 @@ export default function Home() {
         </p>
       </main>
 
-      {/* Modal */}
-      {mostrarModal && (
+      {/* Modal de operador */}
+      {mostrarModalOperador && (
         <ModalOperador
           operadores={operadores}
           onSelect={handleSelecionar}
-          onClose={() => setMostrarModal(false)}
+          onClose={() => setMostrarModalOperador(false)}
+        />
+      )}
+
+      {/* Modal de edição */}
+      {mostrarModalEditar && (
+        <ModalEditarDados
+          dados={dadosTablet}
+          onChange={handleEditarChange}
+          onSave={handleSalvarEdicao}
+          onClose={() => setMostrarModalEditar(false)}
+          podeEditar={podeEditar}
         />
       )}
     </div>
