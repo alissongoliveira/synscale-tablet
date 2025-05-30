@@ -9,7 +9,7 @@ export default function ModalEditarDados({
   podeEditar = false,
 }) {
   return (
-    <div className="absolute top-0 left-[260px] w-[calc(100%-260px)] h-full bg-black/20 flex items-start justify-center z-50">
+    <div className="absolute top-0 left-[260px] w-[calc(100%-260px)] h-full flex items-start justify-center z-50">
       <div className="bg-gray-200 mt-5 p-6 rounded-xl w-[400px] max-w-[90%] shadow-lg">
         {/* Título e fechar */}
         <div className="flex justify-between items-center border-b pb-2 mb-4">
