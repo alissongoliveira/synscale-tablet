@@ -9,24 +9,22 @@ export default function Acompanhar() {
   const [pesoAtual, setPesoAtual] = useState(23000);
   const [podeFinalizar, setPodeFinalizar] = useState(false);
 
-  // Simulação de leitura contínua da balança
+  // Simula o aumento do peso atual (futuramente substituir por WebSocket)
   useEffect(() => {
     const interval = setInterval(() => {
       setPesoAtual((prev) => {
-        const novoPeso = prev + Math.floor(Math.random() * 15); // incremento aleatório
-        if (novoPeso >= pesoDesejado) {
+        const novo = prev + Math.floor(Math.random() * 12); // incremento aleatório
+        if (novo >= pesoDesejado) {
           setPodeFinalizar(true);
           clearInterval(interval);
         }
-        return novoPeso;
+        return novo;
       });
-    }, 800);
-
+    }, 700);
     return () => clearInterval(interval);
   }, [pesoDesejado]);
 
   const handleFinalizar = () => {
-    console.log("Solicitação finalizada!");
     navigate("/");
   };
 
